@@ -32,7 +32,6 @@
 
   * build!
   * fps?!
-  * random/config
   * specs/docs?
   * ...
 

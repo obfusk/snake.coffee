@@ -39,12 +39,18 @@ S.defaults = defaults =
   HEAD_RIGHT_IMG:     null
   HEAD_DOWN_IMG:      null
 
+  WIDTH:              30
+  HEIGHT:             30
+
 # --
 
 S.start = start = (opts) ->
-  o = U.extend {}, defaults, opts
-  w = mk_pit mk_snake('right', [mk_posn(1, 1)]),
-        (fresh_goo(o) for i in [1..6]), o
+  o           = U.extend {}, defaults, opts
+  o.WIDTH_PX  = o.SEG_SIZE * o.WIDTH
+  o.HEIGHT_PX = o.SEG_SIZE * o.HEIGHT
+  o.MT_SCENE  = B.empty_scene o.WIDTH_PX, o.HEIGHT_PX
+  w           = mk_pit mk_snake('right', [mk_posn(1, 1)]),
+                  (fresh_goo(o) for i in [1..6]), o
   bb_opts =
     canvas: o.CANVAS, fps: o.FPS, world: w, on_tick: next_pit,
     on_key: direct_snake, on_draw: render_pit, stop_when: is_dead,
@@ -52,6 +58,7 @@ S.start = start = (opts) ->
   B bb_opts
 
 S.next_pit = next_pit = (w) ->
+  # console.log 'tick', w
   goo_to_eat = can_eat w.snake, w.goos
   if goo_to_eat
     mk_pit grow(w.snake),
@@ -65,13 +72,14 @@ S.direct_snake = direct_snake = (w, k) ->
 
 S.render_pit = render_pit = (w) ->
   snake_and_scene w.snake,
-    goo_list_and_scene(w.goos, B.empty_scene, w.opts),
+    goo_list_and_scene(w.goos, w.opts.MT_SCENE, w.opts),
     w.opts
 
 S.is_dead = is_dead = (w) ->
   is_self_colliding(w.snake) || is_wall_colliding(w.snake, w.opts)
 
 S.render_end = render_end = (w) ->
+  console.log 'end', w
   t = B.text('Game over', w.opts.ENDGAME_TEXT_SIZE, 'black')
   B.overlay t, render_pit(w)
 
@@ -118,7 +126,7 @@ S.decay = decay = (goo) -> mk_goo goo.loc, goo.expire - 1
 
 S.fresh_goo = fresh_goo = (opts) ->
   r = opts.random || random
-  x = r 1, opts.SIZE; y = r 1, opts.SIZE
+  x = r 1, opts.WIDTH; y = r 1, opts.HEIGHT
   mk_goo mk_posn(x, y), opts.EXPIRATION_TIME
 
 # --
@@ -143,21 +151,22 @@ S.is_opposite_dir = is_opposite_dir = (d1, d2) ->
 
 S.snake_and_scene = snake_and_scene = (sn, scene, opts) ->
   sn_body_scene = img_list_and_scene snake_body(sn),
-    opts.BODY_IMG, scene
+    opts.BODY_IMG, scene, opts
   img = switch sn.dir
     when 'up'     then opts.HEAD_UP_IMG
     when 'down'   then opts.HEAD_DOWN_IMG
     when 'left'   then opts.HEAD_LEFT_IMG
     when 'right'  then opts.HEAD_RIGHT_IMG
-  img_and_scene snake_hopts.ead(sn), img, sn_body_scene, opts
+  img_and_scene snake_head(sn), img, sn_body_scene, opts
 
 S.goo_list_and_scene = goo_list_and_scene = (goos, scene, opts) ->
   posns = U.map goos, (x) -> x.loc
-  img_list_and_scene posns, opts.GOO_IMG, scene
+  img_list_and_scene posns, opts.GOO_IMG, scene, opts
 
-S.img_list_and_scene = img_list_and_scene = (posns, img, scene) ->
-  f = (s, p) -> img_and_scene p, img, s, opts
-  U.reduce posns, f, scene
+S.img_list_and_scene = img_list_and_scene =
+  (posns, img, scene, opts) ->
+    f = (s, p) -> img_and_scene p, img, s, opts
+    U.reduce posns, f, scene
 
 S.img_and_scene = img_and_scene = (posn, img, scene, opts) ->
   B.place_image img, (posn.x * opts.SEG_SIZE),
@@ -170,12 +179,12 @@ S.is_self_colliding = is_self_colliding = (sn) ->
 
 S.is_wall_colliding = is_wall_colliding = (sn, opts) ->
   x = snake_head(sn).x; y = snake_head(sn).y
-  x == 0 || x == opts.SIZE || y == 0 || y == opts.SIZE
+  x == 0 || x == opts.WIDTH || y == 0 || y == opts.HEIGHT
 
 # --
 
-S.snake_head = snake_head = (sn) -> U.first snake.segs
-S.snake_body = snake_body = (sn) -> U.rest  snake.segs
+S.snake_head = snake_head = (sn) -> U.first sn.segs
+S.snake_body = snake_body = (sn) -> U.rest  sn.segs
 
 S.snake_change_dir = snake_change_dir = (sn, d) ->
   mk_snake d, sn.segs
@@ -183,6 +192,6 @@ S.snake_change_dir = snake_change_dir = (sn, d) ->
 # --
 
 S.random = random = (min, max) ->
-  Math.random() * (max - min) + min
+  Math.round(Math.random() * (max - min) + min)
 
 # vim: set tw=70 sw=2 sts=2 et fdm=marker :
