@@ -21,7 +21,8 @@
   "main"            : "src/snake.js",
   "files"           : [ "src/snake.js", "README.md" ],
 
-  "dependencies"    : { "bigbang": ">=0.0.1-SNAPSHOT" },
+  "dependencies"    : { "underscore": ">=1.5.2",
+                        "bigbang": ">=0.0.1-SNAPSHOT" },
   "devDependencies" : { "coffee-script": ">=1.6.3" },
 
   "scripts": {
