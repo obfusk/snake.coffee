@@ -19,22 +19,6 @@
 
 []: }}}1
 
-## Examples
-[]: {{{1
-
-See http://obfusk.github.io/snake.coffee for the annotated source with
-examples.
-
-[]: {{{2
-
-```coffee
-...
-```
-
-[]: }}}2
-
-[]: }}}1
-
 ## Specs & Docs
 []: {{{1
 
@@ -47,8 +31,9 @@ examples.
 []: {{{1
 
   * build!
-  * examples!
-  * more specs/docs?
+  * fps?!
+  * random/config
+  * specs/docs?
   * ...
 
 []: }}}1
