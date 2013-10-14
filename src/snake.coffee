@@ -31,7 +31,9 @@ S.mk_posn   = mk_posn   = (x, y)        -> x: x, y: y
 # --
 
 # TODO: FPS
-S.start = start = (canvas = $('#canvas')[0]) ->
+S.start = start = (canvas) ->
+  console.log 'TODO'; return
+
   w = mk_pit mk_snake('right', [mk_posn(1, 1)]),
     (fresh_goo() for i in [1..6])
   o =
