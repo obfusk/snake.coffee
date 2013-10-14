@@ -1,0 +1,31 @@
+{
+  "name"            : "snake",
+  "homepage"        : "https://github.com/obfusk/snake.coffee",
+  "description"     : "...",
+
+  "version"         : "0.0.1-SNAPSHOT",
+  "author"          : "Felix C. Stegerman <flx@obfusk.net>",
+
+  "keywords"        : [ "..." ],
+
+  "licenses": [
+    { "type"        : "GPLv3",
+      "url"         : "http://www.opensource.org/licenses/GPL-3.0" }
+  ],
+
+  "repository": {
+    "type"          : "git",
+    "url"           : "https://github.com/obfusk/snake.coffee.git"
+  },
+
+  "main"            : "src/snake.js",
+  "files"           : [ "src/snake.js", "README.md" ],
+
+  "dependencies"    : { "bigbang": ">=0.0.1-SNAPSHOT" },
+  "devDependencies" : { "coffee-script": ">=1.6.3" },
+
+  "scripts": {
+    "prepublish"    : "coffee -c src/snake.coffee",
+    "test"          : "jasmine-node --coffee spec/"
+  }
+}
