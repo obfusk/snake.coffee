@@ -125,7 +125,7 @@ S.decay = decay = (goo) -> mk_goo goo.loc, goo.expire - 1
 
 S.fresh_goo = fresh_goo = (opts) ->
   r = opts.random || random
-  x = r 1, opts.WIDTH; y = r 1, opts.HEIGHT
+  x = r 1, opts.WIDTH - 1; y = r 1, opts.HEIGHT - 1
   mk_goo mk_posn(x, y), opts.EXPIRATION_TIME
 
 # --
