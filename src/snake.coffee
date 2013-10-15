@@ -2,7 +2,7 @@
 #
 #     File        : snake.coffee
 #     Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-#     Date        : 2013-10-14
+#     Date        : 2013-10-15
 #
 #     Copyright   : Copyright (C) 2013  Felix C. Stegerman
 #     Licence     : GPLv3
@@ -24,7 +24,7 @@ S.mk_posn   = mk_posn   = (x, y)        -> x: x, y: y
 
 # --
 
-S.defaults = defaults =
+S.defaults = defaults =                                         # {{{1
   FPS:                10
   EXPIRATION_TIME:    50
   MAX_GOO:            5
@@ -42,23 +42,27 @@ S.defaults = defaults =
 
   WIDTH:              30
   HEIGHT:             30
+                                                                # }}}1
 
 # --
 
-S.start = start = (opts) ->
-  o           = U.extend {}, defaults, opts
-  o.WIDTH_PX  = o.SEG_SIZE * o.WIDTH
-  o.HEIGHT_PX = o.SEG_SIZE * o.HEIGHT
-  o.MT_SCENE  = B.empty_scene o.WIDTH_PX, o.HEIGHT_PX
-  w           = mk_pit mk_snake('right', [mk_posn(1, 1)]),
-                  (fresh_goo(o) for i in [1..6]), o
+S.start = start = (opts) ->                                     # {{{1
+  o                 = U.extend {}, defaults, opts
+  o.WIDTH_PX        = o.SEG_SIZE * o.WIDTH
+  o.HEIGHT_PX       = o.SEG_SIZE * o.HEIGHT
+  o.WIDTH_PX_HALF   = Math.round o.WIDTH_PX  / 2
+  o.HEIGHT_PX_HALF  = Math.round o.HEIGHT_PX / 2
+  o.MT_SCENE        = B.empty_scene o.WIDTH_PX, o.HEIGHT_PX
+  w                 = mk_pit mk_snake('right', [mk_posn(1, 1)]),
+                        (fresh_goo(o) for i in [1..6]), o
   bb_opts =
     canvas: o.CANVAS, fps: o.FPS, world: w, on_tick: next_pit,
     on_key: direct_snake, on_draw: render_pit, stop_when: is_dead,
     on_stop: render_end
   B bb_opts
+                                                                # }}}1
 
-S.next_pit = next_pit = (w) ->
+S.next_pit = next_pit = (w) ->                                  # {{{1
   goo_to_eat = can_eat w.snake, w.goos
   if goo_to_eat
     mk_pit grow(w.snake),
@@ -66,6 +70,7 @@ S.next_pit = next_pit = (w) ->
       w.opts
   else
     mk_pit slither(w.snake), age_goo(w.goos, w.opts), w.opts
+                                                                # }}}1
 
 S.direct_snake = direct_snake = (w, k) ->
   if is_dir k then world_change_dir w, k else w
@@ -79,7 +84,8 @@ S.is_dead = is_dead = (w) ->
   is_self_colliding(w.snake) || is_wall_colliding(w.snake, w.opts)
 
 S.render_end = render_end = (w) ->
-  B.place_text 'Game over', w.opts.ENDGAME_TEXT_SIZE, 'black',
+  B.place_text 'Game over', w.opts.WIDTH_PX_HALF,
+    w.opts.HEIGHT_PX_HALF, w.opts.ENDGAME_TEXT_SIZE, 'black',
     render_pit(w)
 
 # --
@@ -100,13 +106,14 @@ S.grow = grow = (sn) ->
 S.slither = slither = (sn) ->
   mk_snake sn.dir, [next_head(sn)].concat(U.initial(sn.segs))
 
-S.next_head = next_head = (sn) ->
+S.next_head = next_head = (sn) ->                               # {{{1
   head = snake_head sn; dir = sn.dir
   switch
     when dir == 'up'    then posn_move head,  0, -1
     when dir == 'down'  then posn_move head,  0,  1
     when dir == 'left'  then posn_move head, -1,  0
     when dir == 'right' then posn_move head,  1,  0
+                                                                # }}}1
 
 S.posn_move = posn_move = (p, dx, dy) -> mk_posn p.x + dx, p.y + dy
 
@@ -148,7 +155,7 @@ S.is_opposite_dir = is_opposite_dir = (d1, d2) ->
 
 # --
 
-S.snake_and_scene = snake_and_scene = (sn, scene, opts) ->
+S.snake_and_scene = snake_and_scene = (sn, scene, opts) ->      # {{{1
   sn_body_scene = img_list_and_scene snake_body(sn),
     opts.BODY_IMG, scene, opts
   img = switch sn.dir
@@ -157,6 +164,7 @@ S.snake_and_scene = snake_and_scene = (sn, scene, opts) ->
     when 'left'   then opts.HEAD_LEFT_IMG
     when 'right'  then opts.HEAD_RIGHT_IMG
   img_and_scene snake_head(sn), img, sn_body_scene, opts
+                                                                # }}}1
 
 S.goo_list_and_scene = goo_list_and_scene = (goos, scene, opts) ->
   posns = U.map goos, (x) -> x.loc
