@@ -17,6 +17,8 @@
   A translation of the "snake" game from Realm of Racket [1] to
   coffeescript using the bigbang.coffee [2] library.
 
+  To run the game, use bigbang-snake [3].
+
 []: }}}1
 
 ## Specs & Docs
@@ -30,8 +32,6 @@
 ## TODO
 []: {{{1
 
-  * build!
-  * fps?!
   * specs/docs?
   * ...
 
@@ -40,7 +40,7 @@
 ## License
 []: {{{1
 
-  GPLv3 [3].
+  GPLv3 [4].
 
 []: }}}1
 
@@ -53,7 +53,10 @@
   [2] bigbang.coffee
   --- https://github.com/obfusk/bigbang.coffee
 
-  [3] GNU General Public License, version 3
+  [3] bigbang-snake
+  --- https://github.com/obfusk/bigbang-snake
+
+  [4] GNU General Public License, version 3
   --- http://www.opensource.org/licenses/GPL-3.0
 
 []: }}}1

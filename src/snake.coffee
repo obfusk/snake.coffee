@@ -25,12 +25,13 @@ S.mk_posn   = mk_posn   = (x, y)        -> x: x, y: y
 # --
 
 S.defaults = defaults =
-  SEG_SIZE:           30    # ???
+  FPS:                10
+  EXPIRATION_TIME:    50
   MAX_GOO:            5
-  EXPIRATION_TIME:    150   # ???
-  ENDGAME_TEXT_SIZE:  '2em' # ???
 
-  FPS:                null  # ???
+  SEG_SIZE:           30
+  ENDGAME_TEXT_SIZE:  '8em'
+
   BODY_IMG:           null
   CANVAS:             null
   GOO_IMG:            null
@@ -58,7 +59,6 @@ S.start = start = (opts) ->
   B bb_opts
 
 S.next_pit = next_pit = (w) ->
-  # console.log 'tick', w
   goo_to_eat = can_eat w.snake, w.goos
   if goo_to_eat
     mk_pit grow(w.snake),
@@ -79,9 +79,8 @@ S.is_dead = is_dead = (w) ->
   is_self_colliding(w.snake) || is_wall_colliding(w.snake, w.opts)
 
 S.render_end = render_end = (w) ->
-  console.log 'end', w
-  t = B.text('Game over', w.opts.ENDGAME_TEXT_SIZE, 'black')
-  B.overlay t, render_pit(w)
+  B.place_text 'Game over', w.opts.ENDGAME_TEXT_SIZE, 'black',
+    render_pit(w)
 
 # --
 
@@ -175,7 +174,7 @@ S.img_and_scene = img_and_scene = (posn, img, scene, opts) ->
 # --
 
 S.is_self_colliding = is_self_colliding = (sn) ->
-  U.contains snake_body(sn), snake_head(sn)
+  U.some snake_body(sn), (x) -> U.isEqual x, snake_head(sn)
 
 S.is_wall_colliding = is_wall_colliding = (sn, opts) ->
   x = snake_head(sn).x; y = snake_head(sn).y
