@@ -57,8 +57,8 @@ S.start = start = (opts) ->                                     # {{{1
                         (fresh_goo(o) for i in [1..6]), o
   bb_opts =
     canvas: o.CANVAS, fps: o.FPS, world: w, on_tick: next_pit,
-    on_key: direct_snake, on_draw: render_pit, stop_when: is_dead,
-    on_stop: render_end
+    on_key: direct_snake, to_draw: render_pit, stop_when: is_dead,
+    last_picture: render_end
   B bb_opts
                                                                 # }}}1
 
