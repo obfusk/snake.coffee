@@ -2,7 +2,7 @@
 #
 #     File        : snake.coffee
 #     Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-#     Date        : 2013-10-15
+#     Date        : 2013-10-21
 #
 #     Copyright   : Copyright (C) 2013  Felix C. Stegerman
 #     Licence     : GPLv3
@@ -58,7 +58,7 @@ S.start = start = (opts) ->                                     # {{{1
   bb_opts =
     canvas: o.CANVAS, fps: o.FPS, world: w, on_tick: next_pit,
     on_key: direct_snake, to_draw: render_pit, stop_when: is_dead,
-    last_picture: render_end
+    last_draw: render_end
   B bb_opts
                                                                 # }}}1
 
