@@ -9,8 +9,8 @@
   "keywords"        : [ "..." ],
 
   "licenses": [
-    { "type"        : "GPLv3",
-      "url"         : "http://www.opensource.org/licenses/GPL-3.0" }
+    { "type"        : "GPLv3+",
+      "url"         : "http://www.gnu.org/licenses/gpl-3.0.html" }
   ],
 
   "repository": {
